@@ -5,6 +5,8 @@
   "license": "MIT",
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/jest": "^29.5.11",
     "@types/nodemailer": "^6.4.14",
     "@types/supertest": "^6.0.2",
@@ -22,6 +24,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
+    "watch-dev": "tsc -w",
+    "start-dev": "nodemon --inspect dist/index.js",
     "test:e2e": "jest --config jest-e2e.json --runInBand --detectOpenHandles --forceExit",
     "test:integration": "jest --config jest-integration.json --runInBand --detectOpenHandles --forceExit",
     "coverage": "jest --coverage"
