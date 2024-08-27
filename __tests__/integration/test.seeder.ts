@@ -1,15 +1,27 @@
-import {IUserService} from "../../src/users/types/user.service.interface";
 import {randomUUID} from "crypto";
-import add from "date-fns/add";
+import {add} from "date-fns/add";
 import {db} from "../../src/db";
 
-type RegisterUserType = {
+type RegisterUserPayloadType = {
     login: string,
     pass: string,
     email: string,
     code?: string,
     expirationDate?: Date,
     isConfirmed?: boolean
+}
+
+export type RegisterUserResultType = {
+    id: string,
+    login: string,
+    email: string,
+    passwordHash: string,
+    createdAt: Date,
+    emailConfirmation: {
+        confirmationCode: string,
+        expirationDate: Date,
+        isConfirmed: boolean
+    }
 }
 
 
@@ -41,8 +53,8 @@ export const testSeeder = {
             code,
             expirationDate,
             isConfirmed
-        }: RegisterUserType
-    ): Promise<IUserService> {
+        }: RegisterUserPayloadType
+    ): Promise<RegisterUserResultType> {
         const newUser = {
             login,
             email,

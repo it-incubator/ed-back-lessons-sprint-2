@@ -13,7 +13,13 @@ export const usersService = {
             email,
             passwordHash,
             createdAt: new Date(),
-
+            emailConfirmation: {
+                //default value can be nullable
+                confirmationCode: '',
+                isConfirmed: true,
+                //default value can be nullable
+                expirationDate: new Date()
+            }
         };
         return await usersRepository.create(newUser);
     },
