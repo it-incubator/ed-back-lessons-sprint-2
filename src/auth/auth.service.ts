@@ -7,6 +7,7 @@ import {ResultStatus} from "../common/types/resultCode";
 import {User} from "../users/domain/user.entity";
 import {emailExamples} from "../common/adapters/emailExamples";
 import {nodemailerService} from "../common/adapters/nodemailer.service";
+import {IdType} from "../common/types/id";
 
 export const authService = {
 
@@ -76,4 +77,16 @@ export const authService = {
             data: null
         }
     },
+
+    async checkAccessToken(authHeader: string): Promise<Result<IdType | null>> {
+        const [type, token] = authHeader.split(" ");
+
+        //some logic
+
+        return {
+            status: ResultStatus.Unauthorized,
+            errorMessage: 'Havent payload',
+            data: null
+        }
+    }
 }
