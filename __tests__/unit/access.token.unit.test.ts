@@ -1,64 +1,53 @@
-import {MongoMemoryServer} from "mongodb-memory-server";
-import {db} from "../../src/db";
-import {authService} from "../../src/auth/auth.service";
-import {jwtService} from "../../src/common/adapters/jwt.service";
-import {ResultStatus} from "../../src/common/types/resultCode";
-import {usersRepository} from "../../src/users/user.repository";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import { db } from "../../src/db";
+import { authService } from "../../src/auth/auth.service";
+import { jwtService } from "../../src/common/adapters/jwt.service";
+import { ResultStatus } from "../../src/common/types/resultCode";
+import { usersRepository } from "../../src/users/user.repository";
 
-describe('UNIT', () => {
+describe("UNIT", () => {
+  const checkAccessTokenUseCase = authService.checkAccessToken;
+  it("should not verify noBearer auth", async () => {
+    const result = await checkAccessTokenUseCase("Basic gbfbfbbhf");
 
-    beforeAll(async () => {
-        const mongoServer = await MongoMemoryServer.create()
-        await db.run(mongoServer.getUri());
-    })
+    expect(result.status).toBe(ResultStatus.Unauthorized);
+  });
 
-    beforeEach(async () => {
-        await db.drop();
-    })
+  it("should not verify in jwtService", async () => {
+    jwtService.verifyToken = jest
+      .fn()
+      .mockImplementation(async (token: string) => null);
 
-    afterAll(async () => {
-        await db.drop();
-        await db.stop();
-    })
+    const result = await checkAccessTokenUseCase("Bearer gbfbfbbhf");
 
-    afterAll((done) => done())
+    expect(result.status).toBe(ResultStatus.Unauthorized);
+  });
 
-    const checkAccessTokenUseCase = authService.checkAccessToken
-    it('should not verify noBearer auth', async () => {
-        const result = await checkAccessTokenUseCase('Basic gbfbfbbhf')
+  it("should not verify if token not exist in DB", async () => {
+    jwtService.verifyToken = jest
+      .fn()
+      .mockImplementation(async (token: string) => ({ userId: "1" }));
 
-        expect(result.status).toBe(ResultStatus.Unauthorized)
+    usersRepository.doesExistById = jest
+      .fn()
+      .mockImplementation(async (userId: string) => false);
 
-    })
+    const result = await checkAccessTokenUseCase("Bearer gbfbfbbhf");
 
-    it('should not verify in jwtService', async () => {
-        jwtService.verifyToken = jest.fn().mockImplementation(async (token: string) => null)
+    expect(result.status).toBe(ResultStatus.Unauthorized);
+  });
 
-        const result = await checkAccessTokenUseCase('Bearer gbfbfbbhf')
+  it("should verify access token", async () => {
+    jwtService.verifyToken = jest
+      .fn()
+      .mockImplementation(async (token: string) => ({ userId: "1" }));
 
-        expect(result.status).toBe(ResultStatus.Unauthorized)
+    usersRepository.doesExistById = jest
+      .fn()
+      .mockImplementation(async (userId: string) => true);
 
-    })
+    const result = await checkAccessTokenUseCase("Bearer gbfbfbbhf");
 
-    it('should not verify in usersRepository', async () => {
-        jwtService.verifyToken = jest.fn().mockImplementation(async (token: string) => ({userId: '1'}))
-
-        usersRepository.doesExistById = jest.fn().mockImplementation(async (userId: string) => false)
-
-        const result = await checkAccessTokenUseCase('Bearer gbfbfbbhf')
-
-        expect(result.status).toBe(ResultStatus.Unauthorized)
-
-    })
-
-    it('should verify access token', async () => {
-        jwtService.verifyToken = jest.fn().mockImplementation(async (token: string) => ({userId: '1'}))
-
-        usersRepository.doesExistById = jest.fn().mockImplementation(async (userId: string) => true)
-
-        const result = await checkAccessTokenUseCase('Bearer gbfbfbbhf')
-
-        expect(result.status).toBe(ResultStatus.Success)
-    })
-
-})
+    expect(result.status).toBe(ResultStatus.Success);
+  });
+});

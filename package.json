@@ -26,6 +26,7 @@
     "start": "node dist/index.js",
     "test:e2e": "jest --config jest-e2e.json --runInBand --detectOpenHandles --forceExit",
     "test:integration": "jest --config jest-integration.json --runInBand --detectOpenHandles --forceExit",
+    "test:unit": "jest --config jest-unit.json",
     "coverage": "jest --coverage"
   },
   "devDependencies": {
