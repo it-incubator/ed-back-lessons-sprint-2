@@ -1,10 +1,10 @@
-import { bcryptService } from "../common/adapters/bcrypt.service";
-import { usersRepository } from "../users/user.repository";
-import { WithId } from "mongodb";
-import { IUserDB } from "../users/types/user.db.interface";
-import { jwtService } from "../common/adapters/jwt.service";
-import { Result } from "../common/result/result.type";
-import { ResultStatus } from "../common/result/resultCode";
+import { bcryptService } from '../common/adapters/bcrypt.service';
+import { usersRepository } from '../users/user.repository';
+import { WithId } from 'mongodb';
+import { IUserDB } from '../users/types/user.db.interface';
+import { jwtService } from '../common/adapters/jwt.service';
+import { Result } from '../common/result/result.type';
+import { ResultStatus } from '../common/result/resultCode';
 import { User } from '../users/domain/user.entity';
 import { emailExamples } from '../common/adapters/emailExamples';
 import { nodemailerService } from '../common/adapters/nodemailer.service';
@@ -12,19 +12,20 @@ import { nodemailerService } from '../common/adapters/nodemailer.service';
 export const authService = {
   async loginUser(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<{ accessToken: string } | null>> {
     const result = await this.checkUserCredentials(loginOrEmail, password);
+    //TODO replace with helper function
     if (result.status !== ResultStatus.Success)
       return {
         status: ResultStatus.Unauthorized,
-        errorMessage: "Unauthorized",
-        extensions: [{ field: "loginOrEmail", message: "Wrong credentials" }],
+        errorMessage: 'Unauthorized',
+        extensions: [{ field: 'loginOrEmail', message: 'Wrong credentials' }],
         data: null,
       };
 
     const accessToken = await jwtService.createToken(
-      result.data!._id.toString(),
+      result.data!._id.toString()
     );
 
     return {
@@ -36,27 +37,27 @@ export const authService = {
 
   async checkUserCredentials(
     loginOrEmail: string,
-    password: string,
+    password: string
   ): Promise<Result<WithId<IUserDB> | null>> {
     const user = await usersRepository.findByLoginOrEmail(loginOrEmail);
     if (!user)
       return {
         status: ResultStatus.NotFound,
         data: null,
-        errorMessage: "Not Found",
-        extensions: [{ field: "loginOrEmail", message: "Not Found" }],
+        errorMessage: 'Not Found',
+        extensions: [{ field: 'loginOrEmail', message: 'Not Found' }],
       };
 
     const isPassCorrect = await bcryptService.checkPassword(
       password,
-      user.passwordHash,
+      user.passwordHash
     );
     if (!isPassCorrect)
       return {
         status: ResultStatus.BadRequest,
         data: null,
-        errorMessage: "Bad Request",
-        extensions: [{ field: "password", message: "Wrong password" }],
+        errorMessage: 'Bad Request',
+        extensions: [{ field: 'password', message: 'Wrong password' }],
       };
 
     return {
@@ -75,9 +76,9 @@ export const authService = {
     if (user)
       return {
         status: ResultStatus.BadRequest,
-        errorMessage: 'User already exist',
+        errorMessage: 'Bad Request',
         data: null,
-        extensions: []
+        extensions: [{ field: 'loginOrEmail', message: 'Already Registered' }],
       };
 
     const passwordHash = await bcryptService.generateHash(pass);
@@ -96,7 +97,7 @@ export const authService = {
     return {
       status: ResultStatus.Success,
       data: newUser,
-      extensions: []
+      extensions: [],
     };
   },
 
@@ -110,15 +111,16 @@ export const authService = {
     if (!isUuid) {
       return {
         status: ResultStatus.BadRequest,
+        errorMessage: 'Bad Request',
         data: null,
-        extensions: []
+        extensions: [{ field: 'code', message: 'Incorrect code' }],
       };
     }
 
     return {
       status: ResultStatus.Success,
       data: null,
-      extensions: []
+      extensions: [],
     };
   },
 };
