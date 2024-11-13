@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/jest": "^29.5.11",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/nodemailer": "^6.4.14",
     "@types/supertest": "^6.0.2",
     "bcrypt": "^5.1.1",
@@ -18,11 +19,14 @@
     "mongodb": "^6.3.0",
     "mongodb-memory-server": "^9.1.4",
     "nodemailer": "^6.9.8",
+    "prettier": "^3.3.3",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1"
   },
   "scripts": {
     "build": "tsc",
+    "watch-dev": "tsc -w",
+    "start-dev": "nodemon --inspect dist/index.js",
     "start": "node dist/index.js",
     "test:e2e": "jest --config jest-e2e.json --runInBand --detectOpenHandles --forceExit",
     "test:integration": "jest --config jest-integration.json --runInBand --detectOpenHandles --forceExit",

@@ -45,7 +45,7 @@ export const testSeeder = {
         }
         return users;
     },
-    async registerUser(
+    async insertUser(
         {
             login,
             pass,
