@@ -8,7 +8,7 @@ import { ResultStatus } from '../common/result/resultCode';
 import { User } from '../users/domain/user.entity';
 import { emailExamples } from '../common/adapters/emailExamples';
 import { nodemailerService } from '../common/adapters/nodemailer.service';
-import { IdType } from "../common/types/id";
+import { IdType } from '../common/types/id';
 
 export const authService = {
   async loginUser(
@@ -126,25 +126,23 @@ export const authService = {
   },
 
   async checkAccessToken(authHeader: string): Promise<Result<IdType | null>> {
-    const [type, token] = authHeader.split(" ");
+    const [type, token] = authHeader.split(' ');
 
     const result = await jwtService.verifyToken(token);
-
-    //check in black list
 
     if (!result) {
       return {
         status: ResultStatus.Unauthorized,
-        errorMessage: "Unauthorized",
+        errorMessage: 'Unauthorized',
         data: null,
-        extensions:[{field: null, message: 'Havent payload'}]
+        extensions: [{ field: null, message: 'Havent payload' }],
       };
     }
 
     return {
       status: ResultStatus.Success,
       data: null,
-      extensions:[]
+      extensions: [],
     };
   },
 };
