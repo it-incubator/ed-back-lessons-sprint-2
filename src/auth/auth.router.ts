@@ -3,9 +3,10 @@ import {RequestWithBody} from "../common/types/requests";
 import {LoginInputDto} from "./types/login.input.dto";
 import {authService} from "./auth.service";
 import {routersPaths} from "../common/path/paths";
-import {passwordValidation} from "../users/middlewares/password.validation";
+import {passwordValidation} from "../users/api/middlewares/password.validation";
 import {inputValidation} from "../common/validation/input.validation";
-import {loginOrEmailValidation} from "../users/middlewares/login.or.emaol.validation";
+import {loginOrEmailValidation} from "../users/api/middlewares/login.or.emaol.validation";
+import {HttpStatuses} from "../common/types/httpStatuses";
 
 export const authRouter = Router()
 
@@ -20,7 +21,7 @@ authRouter.post(routersPaths.auth.login,
             loginOrEmail,
             password
         );
-        if (!accessToken) return res.sendStatus(401);
+        if (!accessToken) return res.sendStatus(HttpStatuses.Unauthorized);
 
-        return res.status(200).send({accessToken});
+        return res.status(HttpStatuses.Success).send({accessToken});
     })
