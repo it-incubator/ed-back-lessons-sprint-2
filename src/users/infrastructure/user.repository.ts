@@ -1,6 +1,6 @@
 import { ObjectId, WithId } from 'mongodb';
-import { db } from '../db';
-import { User } from './domain/user.entity';
+import { db } from '../../db';
+import { User } from '../domain/user.entity';
 
 export const usersRepository = {
   async create(user: User): Promise<string> {

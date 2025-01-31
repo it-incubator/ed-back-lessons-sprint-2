@@ -1,7 +1,7 @@
 import { db } from '../../src/db';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { nodemailerService } from '../../src/common/adapters/nodemailer.service';
-import { authService } from '../../src/auth/auth.service';
+import { nodemailerService } from '../../src/auth/adapters/nodemailer.service';
+import { authService } from '../../src/auth/domain/auth.service';
 import { testSeeder } from './test.seeder';
 import { ResultStatus } from '../../src/common/result/resultCode';
 

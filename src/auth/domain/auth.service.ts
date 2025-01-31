@@ -1,14 +1,14 @@
-import { bcryptService } from '../common/adapters/bcrypt.service';
-import { usersRepository } from '../users/user.repository';
+import { bcryptService } from '../adapters/bcrypt.service';
+import { usersRepository } from '../../users/infrastructure/user.repository';
 import { WithId } from 'mongodb';
-import { IUserDB } from '../users/types/user.db.interface';
-import { jwtService } from '../common/adapters/jwt.service';
-import { Result } from '../common/result/result.type';
-import { ResultStatus } from '../common/result/resultCode';
-import { User } from '../users/domain/user.entity';
-import { emailExamples } from '../common/adapters/emailExamples';
-import { nodemailerService } from '../common/adapters/nodemailer.service';
-import { IdType } from '../common/types/id';
+import { IUserDB } from '../../users/types/user.db.interface';
+import { jwtService } from '../adapters/jwt.service';
+import { Result } from '../../common/result/result.type';
+import { ResultStatus } from '../../common/result/resultCode';
+import { User } from '../../users/domain/user.entity';
+import { emailExamples } from '../adapters/emailExamples';
+import { nodemailerService } from '../adapters/nodemailer.service';
+import { IdType } from '../../common/types/id';
 
 export const authService = {
   async loginUser(

@@ -1,9 +1,6 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { db } from '../../src/db';
-import { authService } from '../../src/auth/auth.service';
-import { jwtService } from '../../src/common/adapters/jwt.service';
-import { usersRepository } from '../../src/users/user.repository';
 import { ResultStatus } from '../../src/common/result/resultCode';
+import { authService } from '../../src/auth/domain/auth.service';
+import { jwtService } from '../../src/auth/adapters/jwt.service';
 
 describe('UNIT', () => {
   const checkAccessTokenUseCase = authService.checkAccessToken;

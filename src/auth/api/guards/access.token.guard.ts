@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { IdType } from '../../common/types/id';
-import { authService } from '../auth.service';
-import { ResultStatus } from '../../common/result/resultCode';
-import { HttpStatuses } from '../../common/types/httpStatuses';
+import { IdType } from '../../../common/types/id';
+import { ResultStatus } from '../../../common/result/resultCode';
+import { HttpStatuses } from '../../../common/types/httpStatuses';
+import { authService } from '../../domain/auth.service';
 
 export const accessTokenGuard = async (
   req: Request,

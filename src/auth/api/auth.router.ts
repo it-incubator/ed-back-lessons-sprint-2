@@ -1,20 +1,23 @@
 import { Request, Response, Router } from 'express';
-import { RequestWithBody, RequestWithUserId } from '../common/types/requests';
-import { LoginInputDto } from './types/login.input.dto';
-import { authService } from './auth.service';
-import { routersPaths } from '../common/path/paths';
-import { passwordValidation } from '../users/middlewares/password.validation';
-import { inputValidation } from '../common/validation/input.validation';
-import { loginOrEmailValidation } from '../users/middlewares/login.or.emaol.validation';
+import {
+  RequestWithBody,
+  RequestWithUserId,
+} from '../../common/types/requests';
+import { LoginInputDto } from '../types/login.input.dto';
+import { authService } from '../domain/auth.service';
+import { routersPaths } from '../../common/path/paths';
+import { passwordValidation } from '../../users/middlewares/password.validation';
+import { inputValidation } from '../../common/validation/input.validation';
+import { loginOrEmailValidation } from '../../users/middlewares/login.or.emaol.validation';
 import { accessTokenGuard } from './guards/access.token.guard';
-import { usersQwRepository } from '../users/user.query.repository';
-import { IdType } from '../common/types/id';
-import { ResultStatus } from '../common/result/resultCode';
-import { resultCodeToHttpException } from '../common/result/resultCodeToHttpException';
-import { HttpStatuses } from '../common/types/httpStatuses';
-import { emailValidation } from '../users/middlewares/email.validation';
-import { CreateUserInputDto } from '../users/types/create.user.input.dto';
-import { loginValidation } from '../users/middlewares/login.validation';
+import { usersQwRepository } from '../../users/infrastructure/user.query.repository';
+import { IdType } from '../../common/types/id';
+import { ResultStatus } from '../../common/result/resultCode';
+import { resultCodeToHttpException } from '../../common/result/resultCodeToHttpException';
+import { HttpStatuses } from '../../common/types/httpStatuses';
+import { emailValidation } from '../../users/middlewares/email.validation';
+import { CreateUserDto } from '../../users/types/create-user.dto';
+import { loginValidation } from '../../users/middlewares/login.validation';
 
 export const authRouter = Router();
 
@@ -60,7 +63,7 @@ authRouter.post(
   loginValidation,
   emailValidation,
   inputValidation,
-  async (req: RequestWithBody<CreateUserInputDto>, res: Response) => {
+  async (req: RequestWithBody<CreateUserDto>, res: Response) => {
     const { login, email, password } = req.body;
 
     const result = await authService.registerUser(login, password, email);
