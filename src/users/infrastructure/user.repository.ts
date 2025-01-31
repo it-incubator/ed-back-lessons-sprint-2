@@ -10,14 +10,12 @@ export const usersRepository = {
     return newUser.insertedId.toString();
   },
   async delete(id: string): Promise<boolean> {
-    if (!this._checkObjectId(id)) return false;
     const isDel = await db
       .getCollections()
       .usersCollection.deleteOne({ _id: new ObjectId(id) });
     return isDel.deletedCount === 1;
   },
   async findById(id: string): Promise<WithId<User> | null> {
-    if (!this._checkObjectId(id)) return null;
     return db
       .getCollections()
       .usersCollection.findOne({ _id: new ObjectId(id) });
@@ -36,9 +34,5 @@ export const usersRepository = {
       $or: [{ email }, { login }],
     });
     return !!user;
-  },
-
-  _checkObjectId(id: string): boolean {
-    return ObjectId.isValid(id);
   },
 };
