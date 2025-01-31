@@ -1,13 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { IdType } from '../../../common/types/id';
 import { jwtService } from '../../adapters/jwt.service';
-import { usersRepository } from '../../../users/infrastructure/user.repository';
+import { IdType } from '../../../common/types/id';
 
-export const accessTokenGuard = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const accessTokenGuard = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.headers.authorization) return res.sendStatus(401);
 
   const [authType, token] = req.headers.authorization.split(' ')[1];
@@ -18,12 +13,12 @@ export const accessTokenGuard = async (
   if (payload) {
     const { userId } = payload;
 
-    const user = await usersRepository.doesExistById(userId);
-
-    if (!user) return res.sendStatus(401);
-
     req.user = { id: userId } as IdType;
-    return next();
+    next();
+
+    return;
   }
-  return res.sendStatus(401);
+  res.sendStatus(401);
+
+  return;
 };
