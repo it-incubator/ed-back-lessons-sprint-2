@@ -34,7 +34,6 @@ export const usersQwRepository = {
     };
   },
   async findById(id: string): Promise<IUserView | null> {
-    if (!this._checkObjectId(id)) return null;
     const user = await db
       .getCollections()
       .usersCollection.findOne({ _id: new ObjectId(id) });
@@ -47,8 +46,5 @@ export const usersQwRepository = {
       email: user.email,
       createdAt: user.createdAt.toISOString(),
     };
-  },
-  _checkObjectId(id: string): boolean {
-    return ObjectId.isValid(id);
   },
 };
