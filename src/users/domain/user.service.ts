@@ -1,14 +1,14 @@
 import { usersRepository } from '../infrastructure/user.repository';
 import { bcryptService } from '../../auth/adapters/bcrypt.service';
-import { IUserDB } from '../types/user.db.interface';
 import { CreateUserDto } from '../types/create-user.dto';
+import { User } from './user.entity';
 
 export const usersService = {
   async create(dto: CreateUserDto): Promise<string> {
     const { login, password, email } = dto;
     const passwordHash = await bcryptService.generateHash(password);
 
-    const newUser: IUserDB = {
+    const newUser: User = {
       login,
       email,
       passwordHash,

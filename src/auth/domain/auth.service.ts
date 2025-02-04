@@ -1,7 +1,6 @@
 import { bcryptService } from '../adapters/bcrypt.service';
 import { usersRepository } from '../../users/infrastructure/user.repository';
 import { WithId } from 'mongodb';
-import { IUserDB } from '../../users/types/user.db.interface';
 import { jwtService } from '../adapters/jwt.service';
 import { Result } from '../../common/result/result.type';
 import { ResultStatus } from '../../common/result/resultCode';
@@ -39,7 +38,7 @@ export const authService = {
   async checkUserCredentials(
     loginOrEmail: string,
     password: string
-  ): Promise<Result<WithId<IUserDB> | null>> {
+  ): Promise<Result<WithId<User> | null>> {
     const user = await usersRepository.findByLoginOrEmail(loginOrEmail);
     if (!user)
       return {
